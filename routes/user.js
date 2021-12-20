@@ -1,13 +1,15 @@
-const router = require("express").Router();
-const cloudinary = require("../utils/cloudinary");
-const upload = require("../utils/multer");
-const User = require("../model/user");
+const router = require('express').Router();
+const cloudinary = require('../utils/cloudinary');
+const upload = require('../utils/multer');
+const User = require('../model/user');
 
-router.post("/", upload.single("image"), async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
   try {
     // Upload image to cloudinary
+    console.log(`req.file`, req.file);
     const result = await cloudinary.uploader.upload(req.file.path);
 
+    console.log(`result`, result);
     // Create new user
     let user = new User({
       name: req.body.name,
@@ -22,7 +24,7 @@ router.post("/", upload.single("image"), async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     let user = await User.find();
     res.json(user);
@@ -31,7 +33,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     // Find user by id
     let user = await User.findById(req.params.id);
@@ -45,7 +47,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", upload.single("image"), async (req, res) => {
+router.put('/:id', upload.single('image'), async (req, res) => {
   try {
     let user = await User.findById(req.params.id);
     // Delete image from cloudinary
@@ -67,7 +69,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     // Find user by id
     let user = await User.findById(req.params.id);
